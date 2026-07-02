@@ -9,7 +9,6 @@ public class Main {
         System.out.println("=== SISTEM PAWSAFE: SIMULASI BACKEND RUNNING ===");
 
         // 1. Inisialisasi Data Manager Generik (Memenuhi Penilaian Generics)
-        //DataManager<Laporan> laporanManager = new DataManager<>();
         DataManager<Pengguna> penggunaManager = new DataManager<>();
 
         // 2. Membuat Data Objek Shelter
@@ -28,7 +27,7 @@ public class Main {
         DataGlobal.laporanManager.tambahData(lap2);
 
         // 5. Membuat Data Aktor (Relawan & Admin)
-        Pengguna relawan1 = new Relawan("P01", "Sabrina", "0812345", "Evakuasi Air", true);
+        Pengguna relawan1 = new Relawan("P01", "Sabrina", "0812345", "relawan_user", "relawan123");
         Pengguna admin1 = new Admin("ADM01", "Valencia", "089999", "valen_admin", "rahasia123");
 
         penggunaManager.tambahData(relawan1);

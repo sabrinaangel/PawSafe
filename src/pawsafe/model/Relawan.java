@@ -1,35 +1,41 @@
 package pawsafe.model;
 
-public class Relawan extends Pengguna {
+public class Relawan extends Pengguna implements auth {
+    private String username;
+    private String password;
     private String keahlian;
     private boolean statusAktif;
 
-    public Relawan(String idPengguna, String nama, String noTelp, String keahlian, boolean statusAktif) {
-        super(idPengguna, nama, noTelp);
-        this.keahlian = keahlian;
-        this.statusAktif = statusAktif;
+    public Relawan(String id, String nama, String telp, String username, String password) {
+        super(id, nama, telp);
+        this.username = username;
+        this.password = password;
+        this.keahlian = "Umum"; // Default
+        this.statusAktif = true;
     }
 
-    // Implementasi aksi evakuasi
-    public void evakuasi(Hewan h) {
-        if (statusAktif) {
-            System.out.println("Relawan " + getNama() + " sedang mengevakuasi hewan dengan ID: " + h.getIdHewan());
-        } else {
-            System.out.println("Relawan " + getNama() + " sedang tidak aktif.");
-        }
-    }
-
-    // Override info khusus relawan (Polymorphism)
     @Override
     public void tampilkanInfo() {
-        System.out.println("[Relawan] ID: " + getIdPengguna() + " | Nama: " + getNama() + 
-                           " | Keahlian: " + keahlian + " | Aktif: " + (statusAktif ? "Ya" : "Tidak"));
+        System.out.println("[Relawan] ID: " + getIdPengguna() + " | Nama: " + getNama() + " | Keahlian: " + getKeahlian());
     }
 
-    // Getter dan Setter
-    public String getKeahlian() { return keahlian; }
-    public void setKeahlian(String keahlian) { this.keahlian = keahlian; }
+    public void evakuasi(Hewan h) {
+        System.out.println("Relawan " + getNama() + " sedang mengevakuasi hewan.");
+    }
 
-    public boolean isStatusAktif() { return statusAktif; }
-    public void setStatusAktif(boolean statusAktif) { this.statusAktif = statusAktif; }
+    @Override
+    public boolean login(String inputUser, String inputPass) {
+        return this.username.equals(inputUser) && this.password.equals(inputPass);
+    }
+
+    // WAJIB ADA: Getter keahlian
+    public String getKeahlian() { 
+        return keahlian; 
+    }
+
+    @Override
+    public String getUsername() { return username; }
+    
+    @Override
+    public String getPassword() { return password; }
 }

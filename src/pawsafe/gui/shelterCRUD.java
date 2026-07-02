@@ -290,7 +290,35 @@ public shelterCRUD() {
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void TambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TambahActionPerformed
- 
+        try {
+        // Sesuaikan dengan JTextField yang ada di desain
+        String id = jTextField5.getText().trim(); // ID Shelter
+        String nama = jTextField6.getText().trim(); // Nama Shelter
+        String lokasi = jTextField7.getText().trim(); // Lokasi
+        int kapasitas = Integer.parseInt(jTextField8.getText().trim()); // Kapasitas
+
+        if (nama.isEmpty() || lokasi.isEmpty()) {
+            throw new IllegalArgumentException("Nama dan Lokasi tidak boleh kosong!");
+        }
+
+        // Gunakan variabel 'id' dari input user atau generate otomatis
+        Shelter shelterBaru = new Shelter(id, nama, lokasi, kapasitas, 0);
+
+        DataGlobal.shelterManager.tambahData(shelterBaru);
+        tampilkanDataKeTabel();
+        DataGlobal.shelterManager.simpanCSV("data_shelter.csv");
+
+        // Reset form
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+
+    } catch (NumberFormatException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Kapasitas harus berupa angka!");
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
     }//GEN-LAST:event_TambahActionPerformed
 
     private void HapusDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusDataActionPerformed

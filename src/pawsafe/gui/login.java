@@ -5,6 +5,9 @@
 package pawsafe.gui;
 
 import javax.swing.JOptionPane;
+import pawsafe.model.auth;
+import pawsafe.model.Admin;
+import pawsafe.model.Relawan;
 /**
  *
  * @author asus
@@ -129,37 +132,36 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-String username = jTextField1.getText().trim();
-        String password = new String(jPasswordField1.getPassword()).trim();
-        String role = (String) jComboBox1.getSelectedItem();
+        String username = jTextField1.getText().trim();
+    String password = new String(jPasswordField1.getPassword()).trim();
+    String role = (String) jComboBox1.getSelectedItem();
 
-        try {
-            // Validasi input kosong
-            if (username.isEmpty() || password.isEmpty()) {
-                throw new IllegalArgumentException("Username dan password tidak boleh kosong!");
-            }
-
-            // Cek kredensial lewat objek Admin (bukan hardcoded string)
-            pawsafe.model.Admin adminSistem = new pawsafe.model.Admin(
-                "ADM01", "Administrator", "081200000000", "admin", "123"
-            );
-
-            boolean usernameMatch = username.equals(adminSistem.getUsername());
-            boolean passwordMatch = password.equals(adminSistem.getPassword());
-
-            if (usernameMatch && passwordMatch) {
-                adminSistem.tampilkanInfo(); // Polymorphism terpanggil, kelihatan di console
-                JOptionPane.showMessageDialog(this, "Selamat Datang, " + role + "!");
-                new dashboard().setVisible(true);
-                this.dispose();
-            } else {
-                throw new SecurityException("Username atau password salah!");
-            }
-
-        } catch (IllegalArgumentException | SecurityException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(),
-                "Login Gagal", JOptionPane.WARNING_MESSAGE);
+    try {
+        if (username.isEmpty() || password.isEmpty()) {
+            throw new IllegalArgumentException("Username dan password tidak boleh kosong!");
         }
+
+        // Gunakan Interface Auth untuk validasi
+        pawsafe.model.auth pengguna = null;
+
+        if (role.equals("Admin")) {
+            pengguna = new pawsafe.model.Admin("ADM01", "Administrator", "0812...", "admin", "123");
+        } else if (role.equals("Relawan")) {
+            pengguna = new pawsafe.model.Relawan("REL01", "Relawan Budi", "0812...", "relawan", "456");
+        }
+
+        // Pengecekan login
+        if (pengguna != null && pengguna.login(username, password)) {
+            JOptionPane.showMessageDialog(this, "Selamat Datang, " + role + "!");
+            new dashboard().setVisible(true);
+            this.dispose();
+        } else {
+            throw new SecurityException("Username atau password salah!");
+        }
+
+    } catch (IllegalArgumentException | SecurityException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Login Gagal", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

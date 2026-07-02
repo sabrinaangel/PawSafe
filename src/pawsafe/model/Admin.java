@@ -1,6 +1,6 @@
 package pawsafe.model;
 
-public class Admin extends Pengguna {
+public class Admin extends Pengguna implements auth {
     private String username;
     private String password; // Tipe data dirubah dari varchar ke String agar valid di Java
 
@@ -20,11 +20,14 @@ public class Admin extends Pengguna {
     public void tampilkanInfo() {
         System.out.println("[Admin] ID: " + getIdPengguna() + " | Nama: " + getNama() + " | Username: " + username);
     }
+    
+    @Override
+    public boolean login(String inputUser, String inputPass) {
+        return this.username.equals(inputUser) && this.password.equals(inputPass);
+    }
 
     // Getter dan Setter
     public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
 
     public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
 }
