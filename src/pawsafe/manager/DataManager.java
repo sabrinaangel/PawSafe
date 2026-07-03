@@ -34,8 +34,6 @@ public class DataManager<T> {
     public void hapusData(int index) {
         if (index >= 0 && index < listData.size()) {
             listData.remove(index);
-        } else {
-            throw new IndexOutOfBoundsException("Gagal Hapus: Indeks tidak valid.");
         }
     }
 

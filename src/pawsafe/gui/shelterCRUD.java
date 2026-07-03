@@ -6,6 +6,8 @@ package pawsafe.gui;
 
 import pawsafe.model.Shelter;
 import pawsafe.DataGlobal;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author asus
@@ -13,11 +15,30 @@ import pawsafe.DataGlobal;
 public class shelterCRUD extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(shelterCRUD.class.getName());
-public shelterCRUD() {
+
+    public shelterCRUD() {
         initComponents();
-        // Load data dari file saat form dibuka
         DataGlobal.shelterManager.bacaCSV("data_shelter.csv", Shelter::fromCSV);
         tampilkanDataKeTabel();
+
+        if ("Relawan".equals(DataGlobal.roleUser)) {
+        // Sembunyikan semua input dan tombol Admin
+        jTextField5.setVisible(false); // ID Shelter
+        jTextField6.setVisible(false); // Nama
+        jTextField7.setVisible(false); // Lokasi
+        jTextField8.setVisible(false); // Kapasitas
+        Tambah.setVisible(false);
+        HapusData.setVisible(false);
+        
+        // Sembunyikan label agar tidak melayang kosong
+        jLabel7.setVisible(false);
+        jLabel8.setVisible(false);
+        jLabel9.setVisible(false);
+        jLabel10.setVisible(false);
+        
+        // Opsi: Besarkan ukuran tabel agar memenuhi ruang kosong
+        jScrollPane5.setBounds(150, 50, 700, 350); 
+    }
         this.setLocationRelativeTo(null);
     }
     
@@ -333,14 +354,30 @@ public shelterCRUD() {
     }//GEN-LAST:event_TambahActionPerformed
 
     private void HapusDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusDataActionPerformed
-int row = jTable3.getSelectedRow(); // Gunakan jTable3
-        if (row != -1) {
-            // Hapus dari manager shelter, bukan laporanManager
-            DataGlobal.shelterManager.hapusData(row); 
-            tampilkanDataKeTabel();
+        int baris = jTable3.getSelectedRow();
+        if (baris == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data shelter yang ingin dihapus!");
+            return;
+        }
+
+        // 2. Konfirmasi Hapus
+        int konfirmasi = JOptionPane.showConfirmDialog(this, 
+                "Apakah Anda yakin ingin menghapus data shelter ini?", 
+                "Konfirmasi Hapus", 
+                JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            // 3. Hapus dari Manager
+            // Pastikan nama method di ShelterManager sesuai, contohnya hapusData(baris)
+            DataGlobal.shelterManager.hapusData(baris);
+
+            // 4. Simpan perubahan ke CSV
             DataGlobal.shelterManager.simpanCSV("data_shelter.csv");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus terlebih dahulu!");
+
+            // 5. Refresh Tabel (buat method tampilkanDataKeTabel() di shelterCRUD)
+            tampilkanDataKeTabel();
+
+            JOptionPane.showMessageDialog(this, "Data shelter berhasil dihapus!");
         }
     }//GEN-LAST:event_HapusDataActionPerformed
 

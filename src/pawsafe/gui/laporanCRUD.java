@@ -7,6 +7,7 @@ package pawsafe.gui;
 import pawsafe.DataGlobal;
 import pawsafe.model.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 /**
  *
  * @author asus
@@ -17,17 +18,14 @@ public class laporanCRUD extends javax.swing.JFrame {
 
 public laporanCRUD() {
         initComponents();
-        // 1. Baca ulang CSV agar sinkron dengan file di dashboard
-        DataGlobal.laporanManager.bacaCSV("data_laporan.csv", Laporan::fromCSV);
-
-        // 2. Isi ComboBox
-        comboShelter.removeAllItems();
-        for (Shelter s : DataGlobal.shelterManager.getAllData()) {
-        comboShelter.addItem(s.getNamaShelter());
-    }
-    
-    // 3. Tampilkan data ke tabel (WAJIB)
-    tampilkanDataKeTabel();
+            DataGlobal.laporanManager.bacaCSV("data_laporan.csv", Laporan::fromCSV);
+            // 2. Isi ComboBox
+            comboShelter.removeAllItems();
+            for (Shelter s : DataGlobal.shelterManager.getAllData()) {
+                comboShelter.addItem(s.getNamaShelter());
+            }
+            // 3. Tampilkan semua data
+            tampilkanDataKeTabel();
         this.setLocationRelativeTo(null);
     }
 
@@ -359,14 +357,35 @@ public laporanCRUD() {
     }//GEN-LAST:event_TambahActionPerformed
 
     private void HapusDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusDataActionPerformed
-int row = jTable1.getSelectedRow();
-        if (row != -1) {
-            DataGlobal.laporanManager.hapusData(row);
-            tampilkanDataKeTabel();
-            DataGlobal.laporanManager.simpanCSV("data_laporan.csv");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus terlebih dahulu!");
-        }
+        // 1. Cek apakah ada baris yang dipilih
+    int baris = jTable1.getSelectedRow();
+    if (baris == -1) {
+        JOptionPane.showMessageDialog(this, "Pilih data yang ingin dihapus!");
+        return;
+    }
+
+    // 2. Munculkan Warning (Konfirmasi)
+    int konfirmasi = JOptionPane.showConfirmDialog(this, 
+            "Apakah Anda yakin ingin menghapus data ini?", 
+            "Konfirmasi Hapus", 
+            JOptionPane.YES_NO_OPTION);
+
+    // 3. Jika user klik "Yes" (0 adalah kode untuk YES)
+    if (konfirmasi == JOptionPane.YES_OPTION) {
+        // Ambil ID dari tabel untuk mencari data yang akan dihapus
+        String idYangDihapus = jTable1.getValueAt(baris, 0).toString();
+        
+        // Hapus dari Manager
+        DataGlobal.laporanManager.hapusData(baris);
+        
+        // Simpan perubahan ke CSV
+        DataGlobal.laporanManager.simpanCSV("data_laporan.csv");
+        
+        // Refresh tabel
+        tampilkanDataKeTabel();
+        
+        JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+    }
     }//GEN-LAST:event_HapusDataActionPerformed
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked

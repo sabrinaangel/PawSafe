@@ -15,4 +15,5 @@ public class DataGlobal {
     // Ini yang akan diakses oleh Dashboard.java
     public static DataManager<Laporan> laporanManager = new DataManager<>();
     public static DataManager<Shelter> shelterManager = new DataManager<>();
+    public static String roleUser = "Admin"; // Default ke Admin
 }
