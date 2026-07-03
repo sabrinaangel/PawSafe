@@ -23,19 +23,19 @@ public shelterCRUD() {
     
     private void tampilkanDataKeTabel() {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable3.getModel();
-    model.setRowCount(0); 
+    model.setRowCount(0); // Bersihkan baris lama
     
+    // Looping data
     for (Shelter s : DataGlobal.shelterManager.getAllData()) { 
-        // Sesuaikan dengan nama method di Shelter.java:
         model.addRow(new Object[]{
-            s.getIdShelter(),    // Dari getIdShelter()
-            s.getNamaShelter(),  // Dari getNamaShelter()
+            s.getIdShelter(),    
+            s.getNamaShelter(),  
             s.getLokasi(), 
             s.getKapasitas(), 
-            s.getTerisi()        // Menggunakan getTerisi() untuk kolom Status/Terisi
+            s.getTerisi()     
         });
-        }
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -291,31 +291,42 @@ public shelterCRUD() {
 
     private void TambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TambahActionPerformed
         try {
-        // Sesuaikan dengan JTextField yang ada di desain
-        String id = jTextField5.getText().trim(); // ID Shelter
-        String nama = jTextField6.getText().trim(); // Nama Shelter
-        String lokasi = jTextField7.getText().trim(); // Lokasi
-        int kapasitas = Integer.parseInt(jTextField8.getText().trim()); // Kapasitas
+        // 1. Ambil data dari form
+        String id = jTextField5.getText().trim();
+        String nama = jTextField6.getText().trim();
+        String lokasi = jTextField7.getText().trim();
+        String kapStr = jTextField8.getText().trim();
 
-        if (nama.isEmpty() || lokasi.isEmpty()) {
-            throw new IllegalArgumentException("Nama dan Lokasi tidak boleh kosong!");
+        if (id.isEmpty() || nama.isEmpty() || lokasi.isEmpty() || kapStr.isEmpty()) {
+            throw new IllegalArgumentException("Semua kolom harus diisi!");
         }
 
-        // Gunakan variabel 'id' dari input user atau generate otomatis
+        int kapasitas = Integer.parseInt(kapStr);
+
+        // 2. Buat objek Shelter baru
         Shelter shelterBaru = new Shelter(id, nama, lokasi, kapasitas, 0);
 
+        // 3. Tambahkan ke manager
         DataGlobal.shelterManager.tambahData(shelterBaru);
-        tampilkanDataKeTabel();
+
+        // 4. Simpan ke CSV
         DataGlobal.shelterManager.simpanCSV("data_shelter.csv");
 
-        // Reset form
+        // 5. Update tampilan
+        tampilkanDataKeTabel();
+
+        // 6. Reset form
         jTextField5.setText("");
         jTextField6.setText("");
         jTextField7.setText("");
         jTextField8.setText("");
 
+        javax.swing.JOptionPane.showMessageDialog(this, "Shelter tersimpan!");
+
     } catch (NumberFormatException e) {
         javax.swing.JOptionPane.showMessageDialog(this, "Kapasitas harus berupa angka!");
+    } catch (IllegalArgumentException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage());
     } catch (Exception e) {
         javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
     }

@@ -40,21 +40,21 @@ public class DataManager<T> {
     }
 
     public void simpanCSV(String namaFile) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(namaFile))) {
-            for (T item : listData) {
-                if (item instanceof CSVSerializable) {
-                    writer.write(((CSVSerializable) item).toCSV());
-                    writer.newLine();
-                }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(namaFile, false))) {
+        for (T item : listData) {
+            if (item instanceof CSVSerializable) {
+                writer.write(((CSVSerializable) item).toCSV());
+                writer.newLine();
             }
-            System.out.println("Data berhasil disimpan ke: " + namaFile);
-        } catch (IOException e) {
-            System.out.println("Gagal menyimpan file: " + e.getMessage());
-            javax.swing.JOptionPane.showMessageDialog(null,
-                "Gagal menyimpan data!\n" + e.getMessage(),
-                "Error File I/O", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+        System.out.println("Data berhasil disimpan ke: " + namaFile);
+    } catch (IOException e) {
+        System.out.println("Gagal menyimpan file: " + e.getMessage());
+        javax.swing.JOptionPane.showMessageDialog(null,
+            "Gagal menyimpan data!\n" + e.getMessage(),
+            "Error File I/O", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
+}
 
     public void bacaCSV(String namaFile, CSVLoader<T> loader) {
         listData.clear();

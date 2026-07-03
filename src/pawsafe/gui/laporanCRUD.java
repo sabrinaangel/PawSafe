@@ -17,14 +17,25 @@ public class laporanCRUD extends javax.swing.JFrame {
 
 public laporanCRUD() {
         initComponents();
+        // 1. Baca ulang CSV agar sinkron dengan file di dashboard
         DataGlobal.laporanManager.bacaCSV("data_laporan.csv", Laporan::fromCSV);
-        tampilkanDataKeTabel();
+
+        // 2. Isi ComboBox
+        comboShelter.removeAllItems();
+        for (Shelter s : DataGlobal.shelterManager.getAllData()) {
+        comboShelter.addItem(s.getNamaShelter());
+    }
+    
+    // 3. Tampilkan data ke tabel (WAJIB)
+    tampilkanDataKeTabel();
         this.setLocationRelativeTo(null);
     }
 
     private void tampilkanDataKeTabel() {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);        
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Membersihkan tabel sebelum diisi
+
+        // Mengambil data dari manager yang sudah di-load di constructor
         for (Laporan l : DataGlobal.laporanManager.getAllData()) {
             model.addRow(new Object[]{
                 l.getIdLaporan(),
@@ -75,6 +86,8 @@ public laporanCRUD() {
         jTable1 = new javax.swing.JTable();
         HapusData = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
+        jLabel11 = new javax.swing.JLabel();
+        comboShelter = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -201,6 +214,9 @@ public laporanCRUD() {
         HapusData.setText("Hapus Data");
         HapusData.addActionListener(this::HapusDataActionPerformed);
 
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        jLabel11.setText("Shelter Penampungan");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -208,12 +224,7 @@ public laporanCRUD() {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(HapusData)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel8)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,93 +239,123 @@ public laporanCRUD() {
                                 .addGap(18, 18, 18)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
+                            .addComponent(jLabel9)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(98, 98, 98)
+                                .addComponent(jLabel11)
+                                .addGap(137, 137, 137))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(Tambah))))
-                    .addComponent(jLabel8))
+                                .addComponent(comboShelter, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(30, 30, 30)))
+                        .addComponent(Tambah))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(HapusData)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(162, 162, 162)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(162, 162, 162)
+                        .addGap(75, 75, 75)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel8)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Tambah)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jLabel10))
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Tambah))))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(HapusData))
+                                    .addComponent(comboShelter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(21, 21, 21)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(HapusData)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 670, 420));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 510, 430));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void TambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TambahActionPerformed
-try {
-            String pelapor = jTextField1.getText().trim();
-            String lokasi = jTextField2.getText().trim();
-            String jenisHewan = (String) jComboBox1.getSelectedItem();
-            String status = (String) jComboBox2.getSelectedItem();
-
-            // Validasi input kosong
-            if (pelapor.isEmpty()) {
-                throw new IllegalArgumentException("Nama pelapor tidak boleh kosong!");
+        try {
+        String pelapor = jTextField1.getText().trim();
+        String lokasi = jTextField2.getText().trim();
+        String jenisHewan = (String) jComboBox1.getSelectedItem();
+        String status = (String) jComboBox2.getSelectedItem();
+        
+        // 1. Ambil nama shelter dari ComboBox
+        String namaShelter = comboShelter.getSelectedItem().toString();
+        
+        // 2. Cari objek Shelter yang benar di DataGlobal
+        Shelter shelterTerpilih = null;
+        for (Shelter s : DataGlobal.shelterManager.getAllData()) {
+            if (s.getNamaShelter().equals(namaShelter)) {
+                shelterTerpilih = s;
+                break;
             }
-            if (lokasi.isEmpty()) {
-                throw new IllegalArgumentException("Alamat lokasi tidak boleh kosong!");
-            }
-
-            Hewan hewanInput = (jenisHewan.equals("Kucing"))
-                ? new Kucing("H-Auto", "Default", "Normal", "Kecil")
-                : new Anjing("H-Auto", "Default", "Normal", false);
-
-            Shelter shelterDefault = new Shelter("S-Auto", "Posko Default", "Lokasi Default", 10, 0);
-            Laporan laporanBaru = new Laporan(
-                "LAP-" + System.currentTimeMillis(),
-                hewanInput, shelterDefault, lokasi, status, pelapor
-            );
-
-            DataGlobal.laporanManager.tambahData(laporanBaru);
-            tampilkanDataKeTabel();
-            DataGlobal.laporanManager.simpanCSV("data_laporan.csv");
-
-            // Kosongkan field setelah berhasil
-            jTextField1.setText("");
-            jTextField2.setText("");
-
-        } catch (IllegalArgumentException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(),
-                "Input Tidak Valid", javax.swing.JOptionPane.WARNING_MESSAGE);
         }
+
+        if (shelterTerpilih == null) {
+            throw new Exception("Shelter tidak ditemukan!");
+        }
+
+        // 3. Gunakan method tambahHewan() dari class Shelter.java kamu
+        if (shelterTerpilih.tambahHewan()) { 
+            // Kalau berhasil (ada slot kosong), baru buat Laporan
+            Hewan hewanInput = (jenisHewan.equals("Kucing"))
+                ? new Kucing("H-" + System.currentTimeMillis(), "Default", "Normal", "Kecil")
+                : new Anjing("H-" + System.currentTimeMillis(), "Default", "Normal", false);
+
+            Laporan laporanBaru = new Laporan("LAP-" + System.currentTimeMillis(), 
+                                              hewanInput, shelterTerpilih, lokasi, status, pelapor);
+            
+            DataGlobal.laporanManager.tambahData(laporanBaru);
+            
+            // Simpan perubahan ke CSV
+            DataGlobal.laporanManager.simpanCSV("data_laporan.csv");
+            DataGlobal.shelterManager.simpanCSV("data_shelter.csv"); // Simpan update kapasitas shelter
+            
+            tampilkanDataKeTabel();
+            javax.swing.JOptionPane.showMessageDialog(this, "Laporan berhasil! Shelter " + namaShelter + " terisi.");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal: Shelter " + namaShelter + " sudah penuh!");
+        }
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
     }//GEN-LAST:event_TambahActionPerformed
 
     private void HapusDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HapusDataActionPerformed
@@ -373,10 +414,12 @@ int row = jTable1.getSelectedRow();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton HapusData;
     private javax.swing.JButton Tambah;
+    private javax.swing.JComboBox<String> comboShelter;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

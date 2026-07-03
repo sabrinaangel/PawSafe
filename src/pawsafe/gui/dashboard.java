@@ -24,26 +24,33 @@ public class dashboard extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     private void updateDashboardData() {
-        ArrayList<Laporan> semuaData = DataGlobal.laporanManager.getAllData();        
-        int totalTerjebak = 0;
-        int totalMedis = 0;
-        int totalDievakuasi = 0;
-        for (Laporan l : semuaData) {
-            String status = l.getStatus();            
-            if (status != null) {
-                if (status.equalsIgnoreCase("Terjebak")) {
-                    totalTerjebak++;
-                } else if (status.equalsIgnoreCase("Dalam Penanganan Medis")) {
-                    totalMedis++;
-                } else if (status.equalsIgnoreCase("Terselamatkan")) {
-                    totalDievakuasi++;
-                }
+        DataGlobal.laporanManager.bacaCSV("data_laporan.csv", Laporan::fromCSV);
+    
+    // 2. Ambil semua data
+    java.util.ArrayList<Laporan> semuaData = DataGlobal.laporanManager.getAllData();
+    
+    int totalTerjebak = 0;
+    int totalMedis = 0;
+    int totalDievakuasi = 0;
+    
+    for (Laporan l : semuaData) {
+        String status = l.getStatus();            
+        if (status != null) {
+            if (status.equalsIgnoreCase("Terjebak")) {
+                totalTerjebak++;
+            } else if (status.equalsIgnoreCase("Dalam Penanganan Medis")) {
+                totalMedis++;
+            } else if (status.equalsIgnoreCase("Terselamatkan")) {
+                totalDievakuasi++;
             }
         }
-        jLabel9.setText(String.valueOf(totalTerjebak));
-        jLabel11.setText(String.valueOf(totalMedis));
-        jLabel13.setText(String.valueOf(totalDievakuasi));
     }
+    
+    // 3. Update label
+    jLabel9.setText(String.valueOf(totalTerjebak));
+    jLabel11.setText(String.valueOf(totalMedis));
+    jLabel13.setText(String.valueOf(totalDievakuasi));
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

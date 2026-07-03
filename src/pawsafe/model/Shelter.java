@@ -18,6 +18,15 @@ public class Shelter implements CSVSerializable {
         this.kapasitas = kapasitas;
         this.terisi = terisi;
     }
+    
+    public boolean tambahPenghuni() {
+        // Kita gunakan atribut yang sudah kamu deklarasikan di atas (terisi dan kapasitas)
+        if (terisi < kapasitas) { 
+            terisi++;
+            return true; // Berhasil masuk
+        }
+        return false; // Penuh!
+    }
 
     @Override
     public String toCSV() {
